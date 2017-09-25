@@ -11,6 +11,7 @@ import UIKit
 @IBDesignable
 open class SWSegmentedControl: UIControl {
     
+    open weak var dataSource: SWSegmentedControlDataSource?
     open weak var delegate: SWSegmentedControlDelegate?
     
     private var selectionIndicatorView: UIView!
@@ -116,6 +117,12 @@ open class SWSegmentedControl: UIControl {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
+     
+        if let dataSource = self.dataSource?.itemsWith(sender: self) {
+            guard items != dataSource else {return}
+            items = dataSource;
+            self.commonInit()
+        }
         
         // For autolayout
         self.configureIndicator()
